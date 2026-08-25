@@ -1,73 +1,61 @@
-# React + TypeScript + Vite
- kishore project 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# Kanban Dashboard - Jenkins CI/CD Deployment
 
-Currently, two official plugins are available:
+## Project Overview
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+This project demonstrates an automated CI/CD workflow for deploying a React + TypeScript Kanban Dashboard application using:
 
-## React Compiler
+- GitHub
+- Jenkins
+- Docker
+- Docker Hub
+- AWS EC2
+- Nginx
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+The complete deployment flow is:
 
-## Expanding the ESLint configuration
+**GitHub → Jenkins → Docker Build → Docker Hub → AWS EC2 → Docker Container → Health Check → Validation**
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+The deployment is automated through Jenkins, and the pipeline includes health validation and automatic rollback when a deployment fails.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Application
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+The application is a Kanban-style task manager built using React and TypeScript with Vite.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Application Details
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+| Item | Value |
+|---|---|
+| Frontend | React |
+| Language | TypeScript |
+| Build Tool | Vite |
+| Web Server | Nginx |
+| Application Port | 8080 |
+| Container Name | `kanban-app` |
+| Docker Registry | Docker Hub |
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+---
+
+## GitHub Repository
+
+Source code is maintained in GitHub.
+
+Repository:
+
+https://github.com/kishore-stack/kanban-dashboard.git
+
+The Jenkins pipeline checks out the `main` branch from this repository.
+
+---
+
+# Docker Containerization
+
+The application uses a multi-stage Docker build.
+
+### Stage 1 - Build
+
+The application is built using:
+
+```dockerfile
+FROM node:22-alpine AS builder
